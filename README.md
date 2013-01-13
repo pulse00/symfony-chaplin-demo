@@ -26,7 +26,7 @@ The purpose of this app is to demonstrate the following concepts:
 
 ## Installation
 
-- `composer.phar` install
+- `curl -s https://getcomposer.org/installer | php && ./composer.phar install`
 - `php app/console doctrine:database:create`
 - `php app/console doctrine:schema:create`
 - `php app/console doctrine:fixtures:load`
