@@ -1,0 +1,50 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    firewalls:
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
+            anonymous: true            
+                
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                success_handler: acme_spa_chaplin.authentication_handler
+            logout:       true
+            anonymous:    true
+            
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            form_login:
+                provider: fos_userbundle
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+            anonymous: true            
+
+    access_control:
+        - { path: ^/api, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN

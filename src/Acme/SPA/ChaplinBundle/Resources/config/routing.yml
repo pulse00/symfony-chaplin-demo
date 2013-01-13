@@ -1,0 +1,17 @@
+home:
+    pattern:  /
+    defaults:  { _controller: AcmeSPAChaplinBundle:Default:index }
+    options:
+        expose: true
+        
+books_list:
+    pattern:  /books
+    defaults:  { _controller: AcmeSPAChaplinBundle:Default:list }
+    options:
+        expose: true
+        
+books_show:
+    pattern:  /books/{id}
+    defaults:  { _controller: AcmeSPAChaplinBundle:Default:show }
+    options:
+        expose: true

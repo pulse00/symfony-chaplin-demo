@@ -1,0 +1,8 @@
+{# for ajax requests, render the fos user content without layout #}
+{# for non-ajax requests, render the default template and let chaplin handle the initial routing #}
+
+{% extends app.request.isXmlHttpRequest ? 'FOSUserBundle::ajax.html.twig' : 'AcmeSPAChaplinBundle::layout.html.twig' %}
+
+{% block content %}
+    {% block fos_user_content %}{% endblock %}
+{% endblock %}

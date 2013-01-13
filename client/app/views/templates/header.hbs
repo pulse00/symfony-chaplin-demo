@@ -1,0 +1,29 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href='{{url "home"}}'>bookstore</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">          
+          <li class="active"><a href='{{url "home"}}'>Home</a></li>
+          <li><a href='{{url "books_list"}}'>Books</a></li>
+        </ul>
+      </div>
+
+      <div class="auth">
+        <ul class="nav">
+            {{#if_logged_in}}
+              {{#with_user}}
+                <li><span style="color: #fff;">Logged in as {{username}}</span></li>
+                <li><a href="#" class="logout">Logout</a></li>                                
+              {{/with_user}}
+            {{else}}
+              <li>
+                <a href="#" class="login">Login</a>
+              </li>
+            {{/if_logged_in}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

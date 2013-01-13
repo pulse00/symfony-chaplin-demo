@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta name="fragment" content="!">
+    {{ sonata_seo_title() }}
+    {{ sonata_seo_metadatas() }}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+</head>
+<body>
+    <header class="header-container" id="header-container"></header>
+    <div class="container-narrow" id="page-container"></div>
+    <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script src="{{ asset('js/vendor.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>require('initialize');</script>
+    {% if payload is defined %}
+        <div id="payload" data-object="{{ payload|serialize }}"></div>
+    {% endif %}
+    <div id="modal-view" class="modal hide fade"></div>
+    {# debug toolbar is added via the javascript block during the initial request #}
+    {% block javascripts %}{% endblock %}
+</body>
+</html>
