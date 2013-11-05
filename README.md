@@ -34,3 +34,5 @@ The purpose of this app is to demonstrate the following concepts:
 - Access `http://bookstore.local`.
 - Login with user `chaplin` password `symfony`
 
+
+
