@@ -40,6 +40,8 @@ This demo comes with a vagrant/docker configuration which has everything pre-ins
 
 If you have vagrant installed, simply run `vagrant up` and ssh into the box using `vagrant ssh`.
 
+The application will be exposed on `http://localhost:8888/app_dev.php`.
+
 From there you can obtain php / node shells through docker containers:
 
 ### Docker
