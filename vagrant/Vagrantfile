@@ -8,6 +8,10 @@ VAGRANTFILE_API_VERSION = "2"
 VAGRANT_VM_MEMORY = ENV['VAGRANT_VM_MEMORY'] || "4096"
 VAGRANT_CPUS      = ENV['VAGRANT_CPUS'] || "2"
 
+# create a github token for composer if you run into rate limits
+# https://github.com/composer/composer/blob/master/doc/articles/troubleshooting.md#api-rate-limit-and-two-factor-authentication
+GITHUB_TOKEN = ENV['GITHUB_TOKEN'] || ""
+
 $script = <<SCRIPT
   mkdir -p /var/log/nginx
   mkdir -p /data/mysql
@@ -29,15 +33,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # mysql
   config.vm.network :forwarded_port, :host => 3600, :guest => 3600
 
+  # run the docker provisioner
   config.vm.provision "docker" do |d|
 
     # run mysql
     d.run "pulse00/mysql",
       args: "-name mysql -p 3600:3600 -e MYSQL_PASSWORD=changeme -v /data/mysql:/var/lib/mysql"
 
-    # docker run -d -p 80:80 -link mysql:mysql -v /vagrant/vagrant/nginx:/etc/nginx/sites-available -v /vagrant:/var/www -v /var/log/nginx:/var/log/nginx pulse00/nginx-php
-    d.run "pulse00/nginx-php",
+    # install composer dependencies
+    d.run "install-composer-dependencies",
+      image: "pulse00/nginx-php",
+      cmd: "-c './composer.phar config -g github-oauth.github.com #{GITHUB_TOKEN} && ./composer.phar install --prefer-dist && ./bin/init.sh'",
+      args: "-link mysql:mysql -v /vagrant:/var/www -w /var/www -entrypoint='bash'"
+
+    # run nginx and php-fpm
+    d.run "run-nginx",
+      image: "pulse00/nginx-php",
       args: "-p 80:80 -link mysql:mysql -v /vagrant/vagrant/nginx:/etc/nginx/sites-available -v /vagrant:/var/www -v /var/log/nginx:/var/log/nginx"
+
+    # install npm dependencies
+    d.run "install-npm-dependencies",
+      image: "pulse00/chaplinjs",
+      cmd: "-c 'npm install && bower install --allow-root'",
+      args: "-v /vagrant/client:/var/www -w /var/www -entrypoint='bash'"
+
+    # run brunch
+    d.run "run-brunch",
+      image: "pulse00/chaplinjs",
+      cmd: "-c 'brunch w'",
+      args: "-v /vagrant/client:/var/www -w /var/www -entrypoint='bash'"
 
   end
 

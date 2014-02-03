@@ -1,5 +1,4 @@
 imports:
-    - { resource: parameters.yml }
     - { resource: parameters.php }
     - { resource: security.yml }
 
@@ -14,7 +13,7 @@ framework:
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
-    default_locale: "%locale%"
+    default_locale: en
     trusted_hosts: ~
     trusted_proxies: ~
     session:
@@ -46,12 +45,14 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   "%database_driver%"
+        # NOTE: the credentials should normally come from a server specific config file
+        # i've omitted this here for demo purposes...
+        driver:   pdo_mysql
         host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
+        port:     3306
+        dbname:   sfchaplin
+        user:     admin
+        password: changeme
         charset:  UTF8
 
     orm:
@@ -60,10 +61,10 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
+    transport: smtp
+    host:      127.0.0.1
+    username:  null
+    password:  null
     spool:     { type: memory }
 
 # configure the fos user entity

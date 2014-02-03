@@ -24,22 +24,19 @@
         "friendsofsymfony/rest-bundle": "dev-master",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "friendsofsymfony/jsrouting-bundle": "dev-master",
-        "sonata-project/seo-bundle": "dev-master",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "sonata-project/seo-bundle": "dev-master"
     },
    "require-dev": {
         "phpunit/phpunit": "3.7.*"
     },
     "scripts": {
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",

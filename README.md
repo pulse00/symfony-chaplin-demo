@@ -34,5 +34,28 @@ The purpose of this app is to demonstrate the following concepts:
 - Access `http://bookstore.local`.
 - Login with user `chaplin` password `symfony`
 
+## Vagrant
+
+This demo comes with a vagrant/docker configuration which has everything pre-installed inside the `vagrant` directory.
+
+If you have vagrant installed, simply run `vagrant up` and ssh into the box using `vagrant ssh`.
+
+From there you can obtain php / node shells through docker containers:
+
+### Docker
 
 
+#### Containers
+
+'pulse00/nginx-php' will run an nginx server with a php-fpm backend providing the environment for the symfony app.
+
+
+`pulse00/chaplinjs` will run the `brunch -w` command after starting up vagrant.
+
+#### PHP shell
+
+`sudo docker run -i -t -rm  -link mysql:mysql -v /vagrant:/var/www -w /var/www -entrypoint='bash' pulse00/nginx-php -c 'bash'`
+
+#### Brunch shell
+
+`sudo docker run -i -t -rm -v /vagrant/client:/var/www -w /var/www -entrypoint='bash' pulse00/chaplinjs -c 'bash'`
