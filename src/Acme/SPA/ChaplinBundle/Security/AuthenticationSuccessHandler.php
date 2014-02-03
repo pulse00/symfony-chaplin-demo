@@ -49,7 +49,7 @@ class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterf
 
         if (!$oauthToken instanceof AccessToken) {
             // id 1 is our chaplin client
-            $chaplinClient = $this->doctrine->getRepository('AcmeSPAApiBundle:Oauth/Client')->find(1);
+            $chaplinClient = $this->doctrine->getRepository('AcmeSPAApiBundle:Oauth\Client')->find(1);
             $oauthToken = $tokenManager->createToken();
             // TODO: create a more sophisticated access token
             $oauthToken->setToken(uniqid());
