@@ -47,7 +47,7 @@ From there you can obtain php / node shells through docker containers:
 
 #### Containers
 
-'pulse00/nginx-php' will run an nginx server with a php-fpm backend providing the environment for the symfony app.
+`pulse00/nginx-php` will run an nginx server with a php-fpm backend providing the environment for the symfony app.
 
 
 `pulse00/chaplinjs` will run the `brunch -w` command after starting up vagrant.
