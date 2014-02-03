@@ -2,7 +2,7 @@
 namespace Acme\SPA\ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
+use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @ORM\Table(name="fos__user")
