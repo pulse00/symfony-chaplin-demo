@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# set environment variables to suit your needs
+VAGRANT_VM_MEMORY = ENV['VAGRANT_VM_MEMORY'] || "4096"
+VAGRANT_CPUS      = ENV['VAGRANT_CPUS'] || "2"
+
+$script = <<SCRIPT
+  mkdir -p /var/log/nginx
+  mkdir -p /data/mysql
+SCRIPT
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "raring64"
+
+  # mount the app folder
+  config.vm.synced_folder "../",  "/vagrant", type: "nfs"
+
+  # create the persistend directories
+  config.vm.provision :shell, :inline => $script
+
+  # nginx
+  config.vm.network :forwarded_port, :host => 8888, :guest => 80
+
+  # mysql
+  config.vm.network :forwarded_port, :host => 3600, :guest => 3600
+
+  config.vm.provision "docker" do |d|
+
+    # run mysql
+    d.run "pulse00/mysql",
+      args: "-name mysql -p 3600:3600 -e MYSQL_PASSWORD=changeme -v /data/mysql:/var/lib/mysql"
+
+    # docker run -d -p 80:80 -link mysql:mysql -v /vagrant/vagrant/nginx:/etc/nginx/sites-available -v /vagrant:/var/www -v /var/log/nginx:/var/log/nginx pulse00/nginx-php
+    d.run "pulse00/nginx-php",
+      args: "-p 80:80 -link mysql:mysql -v /vagrant/vagrant/nginx:/etc/nginx/sites-available -v /vagrant:/var/www -v /var/log/nginx:/var/log/nginx"
+
+  end
+
+  # vmware overrides
+  config.vm.provider :vmware_fusion do |f, override|
+
+    f.vmx["displayName"]  = "docker"
+    f.vmx["memsize"]      = VAGRANT_VM_MEMORY
+    f.vmx["numvcpus"]     = VAGRANT_CPUS
+
+    override.vm.box_url   = "https://dl.dropboxusercontent.com/u/263376350/ubuntu1310-vagrant-vmware.box"
+
+  end
+
+  #virtualbox overrides
+  config.vm.provider :virtualbox do |v, override|
+
+    v.customize ["modifyvm", :id, "--memory", VAGRANT_VM_MEMORY]
+    v.customize ["modifyvm", :id, "--cpus", VAGRANT_CPUS]
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", 95]    
+
+    override.vm.network "private_network", ip: "33.33.33.10"
+    override.vm.box_url   = "https://dl.dropboxusercontent.com/u/263376350/ubuntu1310-vagrant-virtualbox.box"
+
+  end
+
+end

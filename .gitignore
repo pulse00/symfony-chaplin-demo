@@ -5,7 +5,6 @@ app/logs/*
 app/config/parameters.yml
 build/
 vendor
-composer.phar
 .DS_Store
 npm-debug.log
 .buildpath

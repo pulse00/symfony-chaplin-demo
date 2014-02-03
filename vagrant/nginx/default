@@ -1,0 +1,33 @@
+server {
+
+	# Make site accessible from http://localhost/
+	server_name localhost;
+
+        location / {
+            root /var/www/web;
+            index  app.php;
+            try_files $uri $uri/ /app.php?q=$uri&$args;
+        }
+
+        location ~* (app|app_dev)\.php(/|$) {
+
+            root /var/www/web;
+
+            fastcgi_split_path_info ^(.+\.php)(/.*)$;
+            fastcgi_pass unix:/var/run/php5-fpm.sock;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            fastcgi_index app.php;
+            include fastcgi_params;
+
+            fastcgi_temp_file_write_size 10m;
+            fastcgi_busy_buffers_size 512k;
+            fastcgi_buffer_size 512k;
+            fastcgi_buffers 16 512k;
+            fastcgi_connect_timeout 300;
+            fastcgi_send_timeout 300;
+            fastcgi_read_timeout 300;
+            fastcgi_intercept_errors on;
+            fastcgi_next_upstream error invalid_header timeout http_500;            
+        }
+}
+
